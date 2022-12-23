@@ -14,20 +14,24 @@ public class Main {
     public static void main(String[] args) throws IOException {
         Scanner scan = new Scanner(System.in);
         System.out.println("Введите город, в котором хотите узнать погоду: ");
-        String town = scan.next();
+        String town = scan.nextLine();
         System.out.println("Город: " + town);
         Input input = new Input(town);
         input.getCoordinates();
         String url = input.getNewURL();
         //System.out.println("url: " + url);
         Parse.getInfo(url);
-        ans = Parse.getInform();
-        for(int i=0; i<ans.size();i++){
-            System.out.println("Дата: " + ans.get(i).getDate() +
-                    "\nТемпература днем: " + ans.get(i).getTemp_day() +
-                    "\nТемпература ночью: " + ans.get(i).getTemp_night() +
-                    "\nОсадки: " + ans.get(i).getInform() + "\n");
+        if(url.length()>11) {
+            ans = Parse.getInform();
+            for (int i = 0; i < ans.size(); i++) {
+                System.out.println("Дата: " + ans.get(i).getDate() +
+                        "\nТемпература днем: " + ans.get(i).getTemp_day() +
+                        "\nТемпература ночью: " + ans.get(i).getTemp_night() +
+                        "\nОсадки: " + ans.get(i).getInform() + "\n");
+            }
         }
+        else
+            System.out.println("Город не найден(");
 
     }
 }

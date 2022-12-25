@@ -12,12 +12,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Parse {
+    static String url;
     static Document Doc;
     static List<Model> inform = new ArrayList<>();
 
-    public static void getInfo(String url) throws IOException {
-        Doc = Jsoup.connect("https://yandex.ru/pogoda" + url).get();
-        //System.out.println(Doc);
+    public Parse(String url) throws IOException {
+        this.url = url;
+        this.Doc = Jsoup.connect(url).get();
+    }
+
+    public static void getInfo() throws IOException {
 
         Elements date_element = Doc.getElementsByAttributeValue("class",
                 "time forecast-briefly__date");
@@ -81,7 +85,26 @@ public class Parse {
     public static List<Model> getInform() {
         return inform;
     }
-    public void clean(){
+
+    public static boolean check(){
+        Elements elements = Doc.getElementsByAttributeValue("class", "place-list__item");
+        if(elements.isEmpty())
+            return true;
+        else
+            return false;
+    }
+
+    public static List<Choise> gethoise(){
+        List<Choise> res = new ArrayList<>();
+        Elements elements = Doc.getElementsByAttributeValue("class","link place-list__item-name i-bem");
+        for(Element el: elements){
+            String townName = el.text();
+            String townURL = el.attr("href");
+            //System.out.println("townName: " + townName + "\ntownURL: " + townURL);
+            Choise choise = new Choise(townName,townURL);
+            res.add(choise);
+        }
+        return res;
 
     }
 }
